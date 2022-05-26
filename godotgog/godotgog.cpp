@@ -67,7 +67,7 @@ void GodotGOG::run_callbacks() {
 }
 
 void GodotGOG::shutdown() {
-  GOG_FAIL_COND(GOGStatus == GOG_INIT_NOT_INSTALLED);
+  GOG_FAIL_COND(GOGStatus < GOG_INIT_OFFLINE);
 
   galaxy::api::Shutdown();
 }
@@ -81,7 +81,7 @@ uint64_t GodotGOG::get_galaxy_id() {
 }
 
 void GodotGOG::sign_out() {
-  GOG_FAIL_COND(GOGStatus < GOG_INIT_OK);
+  GOG_FAIL_COND(GOGStatus < GOG_INIT_OFFLINE);
 
   galaxy::api::User()->SignOut();
 }

@@ -88,26 +88,8 @@ bool GodotGOGUserstats::setLeaderboardScore(const String &name, int score, bool 
   return true;
 }
 
-Array GodotGOGUserstats::getLeaderboardEntries(int fromIndex, int toIndex) {
-  GOG_FAIL_COND_V(!isUserStatsReady(), leaderboard_entries);
-
-  leaderboard_entries.clear();
-
-  for (int index = fromIndex; index < toIndex; index++) {
-    uint32_t rank;
-    int32_t score;
-    galaxy::api::GalaxyID user_id;
-
-    galaxy::api::Stats()->GetRequestedLeaderboardEntry(index, rank, score, user_id);
-
-    Dictionary entryDict;
-    entryDict["score"] = score;
-    entryDict["name"] = galaxy::api::Friends()->GetFriendPersonaName(user_id);
-    entryDict["user_id"] = user_id.GetRealID();
-    entryDict["global_rank"] = rank;
-
-    leaderboard_entries.append(entryDict);
-  }
+Array GodotGOGUserstats::getLeaderboardEntries() {
+  return leaderboard_entries;
 }
 
 bool GodotGOGUserstats::isAchievementVisible(const String &name) {
@@ -304,7 +286,25 @@ void GodotGOGUserstats::OnLeaderboardsRetrieveFailure(galaxy::api::ILeaderboards
 
 void GodotGOGUserstats::OnLeaderboardEntriesRetrieveSuccess(const char* name, uint32_t entryCount) {
   
-  emit_signal("leaderboard_entries_retrieve_success", name, entryCount);
+  leaderboard_entries.clear();
+
+  for (int index = 0; index < entryCount; index++) {
+    uint32_t rank;
+    int32_t score;
+    galaxy::api::GalaxyID user_id;
+
+    galaxy::api::Stats()->GetRequestedLeaderboardEntry(index, rank, score, user_id);
+
+    Dictionary entryDict;
+    entryDict["score"] = score;
+    entryDict["name"] = galaxy::api::Friends()->GetFriendPersonaName(user_id);
+    entryDict["user_id"] = user_id.GetRealID();
+    entryDict["global_rank"] = rank;
+
+    leaderboard_entries.append(entryDict);
+  }
+
+  emit_signal("leaderboard_entries_retrieve_success", name, leaderboard_entries);
 }
 
 void GodotGOGUserstats::OnLeaderboardEntriesRetrieveFailure(const char* name, galaxy::api::ILeaderboardEntriesRetrieveListener::FailureReason failureReason) {

@@ -147,7 +147,7 @@ void GodotGOG::_bind_methods() {
 
   //User
   ObjectTypeDB::bind_method(_MD("get_galaxy_id"), &GodotGOG::get_galaxy_id);
-  ObjectTypeDB::bind_method(_MD("sign_in"), &GodotGOG::signed_in);
+  ObjectTypeDB::bind_method(_MD("sign_in"), &GodotGOG::sign_in);
   ObjectTypeDB::bind_method(_MD("sign_out"), &GodotGOG::sign_out);
   ObjectTypeDB::bind_method(_MD("signed_in"), &GodotGOG::signed_in);
   ObjectTypeDB::bind_method(_MD("is_logged_out"), &GodotGOG::is_logged_out);

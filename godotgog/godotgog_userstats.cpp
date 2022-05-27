@@ -182,13 +182,13 @@ bool GodotGOGUserstats::storeAchievements() {
 bool GodotGOGUserstats::getAchievement(const String &name) {
   // This shortcut is safe, since everything is checked by the 
   // getAchievementAndUnlockTime() function.
-  return getAchievementAndUnlockTime(name)["unlocked"];
+  return getAchievementAndUnlockTime(name)["achieved"];
 }
 
 Dictionary GodotGOGUserstats::getAchievementAndUnlockTime(const String &name) {
   Dictionary achieve;
 
-  achieve["unlocked"] = false;
+  achieve["achieved"] = false;
 
   GOG_FAIL_COND_V(!isUserStatsReady(), achieve);
 
@@ -201,7 +201,7 @@ Dictionary GodotGOGUserstats::getAchievementAndUnlockTime(const String &name) {
     printf("GOG Galaxy: Failed to get achievement %s: %s\n", name.utf8().get_data(), galaxy::api::GetError()->GetMsg());
 
   } else {
-    achieve["unlocked"] = unlocked;
+    achieve["achieved"] = unlocked;
     achieve["unlocked"] = unlockTime;
   }
 
@@ -367,7 +367,7 @@ void GodotGOGUserstats::_bind_methods() {
 
   ADD_SIGNAL(MethodInfo("leaderboards_retrieve_success"));
   ADD_SIGNAL(MethodInfo("leaderboards_retrieve_failure", PropertyInfo(Variant::INT, "failureReason")));
-  ADD_SIGNAL(MethodInfo("leaderboard_entries_retrieve_success", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "entryCount")));
+  ADD_SIGNAL(MethodInfo("leaderboard_entries_retrieve_success", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "entries")));
   ADD_SIGNAL(MethodInfo("leaderboard_entries_retrieve_failure", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "failureReason")));
   ADD_SIGNAL(MethodInfo("leaderboard_score_update_success", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "score"), PropertyInfo(Variant::INT, "oldRank"), PropertyInfo(Variant::INT, "newRank")));
   ADD_SIGNAL(MethodInfo("leaderboard_score_update_failure", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "score"), PropertyInfo(Variant::INT, "failureReason")));

@@ -42,13 +42,13 @@ public:
   ~GodotGOG();
 
   //Initialization
-  int GOGInit(String clientId, String clientSecret);
+  int GOGInit(String clientId, String clientSecret, bool online = true);
   void run_callbacks();
   void shutdown();
 
   //User
   uint64_t get_galaxy_id();
-  void sign_in();
+  void sign_in(bool online = false);
   void sign_out();
   bool signed_in();
   bool is_logged_out();

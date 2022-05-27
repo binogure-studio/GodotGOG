@@ -25,7 +25,7 @@ void GodotGOG::reset_singleton() {
   GodotGOG::singleton = NULL;
 }
 
-int GodotGOG::GOGInit(String clientId, String clientSecret) {
+int GodotGOG::GOGInit(String clientId, String clientSecret, bool online) {
   galaxy::api::Init({
     clientId.utf8().get_data(),
     clientSecret.utf8().get_data()
@@ -44,19 +44,25 @@ int GodotGOG::GOGInit(String clientId, String clientSecret) {
   return GOGStatus;
 }
 
-void GodotGOG::sign_in() {
+void GodotGOG::sign_in(bool online) {
   // If GOG hasn't been initialized, we'd better not try to sign in again
   // It's better to call GOGInit insteads
   GOG_FAIL_COND(GOGStatus == GOG_INIT_NOT_INSTALLED);
 
   printf("GOG Initialization\n");
-  galaxy::api::User()->SignInGalaxy(false, this);
+  galaxy::api::User()->SignInGalaxy(online, this);
   if (galaxy::api::GetError()) {
     printf("GOG Signing in error: %s\n", galaxy::api::GetError()->GetMsg());
     GOGStatus = GOG_INIT_PRODUCT_NOT_OWNED;
+    emit_signal("auth_failure", galaxy::api::IAuthListener::FailureReason::FAILURE_REASON_UNDEFINED);
 
-  } else {
+  } else if (online) {
     GOGStatus = GOG_INIT_IN_PROGRESS;
+  } else {
+    GOGStatus = GOG_INIT_OFFLINE;
+
+    printf("GOG Initialized (offline)\n");
+    emit_signal("auth_success");
   }
 }
 
@@ -141,13 +147,13 @@ void GodotGOG::OnAuthLost() {
 
 void GodotGOG::_bind_methods() {
   //Initialization
-  ObjectTypeDB::bind_method(_MD("GOGInit", "clientId", "clientSecret"), &GodotGOG::GOGInit);
+  ObjectTypeDB::bind_method(_MD("GOGInit", "clientId", "clientSecret", "online"), &GodotGOG::GOGInit);
   ObjectTypeDB::bind_method(_MD("run_callbacks"), &GodotGOG::run_callbacks);
   ObjectTypeDB::bind_method(_MD("shutdown"), &GodotGOG::shutdown);
 
   //User
   ObjectTypeDB::bind_method(_MD("get_galaxy_id"), &GodotGOG::get_galaxy_id);
-  ObjectTypeDB::bind_method(_MD("sign_in"), &GodotGOG::sign_in);
+  ObjectTypeDB::bind_method(_MD("sign_in", "online"), &GodotGOG::sign_in);
   ObjectTypeDB::bind_method(_MD("sign_out"), &GodotGOG::sign_out);
   ObjectTypeDB::bind_method(_MD("signed_in"), &GodotGOG::signed_in);
   ObjectTypeDB::bind_method(_MD("is_logged_out"), &GodotGOG::is_logged_out);

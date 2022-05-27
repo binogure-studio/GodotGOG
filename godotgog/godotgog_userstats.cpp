@@ -56,6 +56,19 @@ bool GodotGOGUserstats::findLeaderboard(const String &name) {
   return true;
 }
 
+bool GodotGOGUserstats::findOrCreateLeaderboard(const String &name, const String &displayName, int sortMethod, int displayType) {
+  GOG_FAIL_COND_V(!isUserStatsReady(), false);
+
+  galaxy::api::Stats()->FindOrCreateLeaderboard(name.utf8().get_data(), displayName.utf8().get_data(), (galaxy::api::LeaderboardSortMethod) sortMethod, (galaxy::api::LeaderboardDisplayType) displayType, this);
+  if (galaxy::api::GetError()) {
+    printf("GOG Galaxy: Failed to request leaderboard: %s\n", galaxy::api::GetError()->GetMsg());
+
+    return false;
+  }
+
+  return true;
+}
+
 int GodotGOGUserstats::getLeaderboardEntryCount(const String &name) {
   GOG_FAIL_COND_V(!isUserStatsReady(), 0);
 
@@ -353,6 +366,7 @@ void GodotGOGUserstats::_bind_methods() {
   ObjectTypeDB::bind_method(_MD("resetAllStats"), &GodotGOGUserstats::resetAllStats);
   ObjectTypeDB::bind_method(_MD("requestLeaderboards"), &GodotGOGUserstats::requestLeaderboards);
   ObjectTypeDB::bind_method(_MD("findLeaderboard", "name"), &GodotGOGUserstats::findLeaderboard);
+  ObjectTypeDB::bind_method(_MD("findOrCreateLeaderboard", "name", "displayName", "sortMethod", "displayType"), &GodotGOGUserstats::findOrCreateLeaderboard);
   ObjectTypeDB::bind_method(_MD("getLeaderboardEntryCount", "name"), &GodotGOGUserstats::getLeaderboardEntryCount);
   ObjectTypeDB::bind_method(_MD("downloadLeaderboardEntries", "rStart", "rEnd", "type"), &GodotGOGUserstats::downloadLeaderboardEntries);
   ObjectTypeDB::bind_method(_MD("setLeaderboardScore", "name", "score", "forceUpdate"), &GodotGOGUserstats::setLeaderboardScore);
@@ -373,4 +387,13 @@ void GodotGOGUserstats::_bind_methods() {
   ADD_SIGNAL(MethodInfo("leaderboard_score_update_failure", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "score"), PropertyInfo(Variant::INT, "failureReason")));
   ADD_SIGNAL(MethodInfo("leaderboard_retrieve_success", PropertyInfo(Variant::STRING, "name")));
   ADD_SIGNAL(MethodInfo("leaderboard_retrieve_failure", PropertyInfo(Variant::STRING, "name"), PropertyInfo(Variant::INT, "failureReason")));
+
+  BIND_CONSTANT(LEADERBOARD_SORT_METHOD_NONE);
+  BIND_CONSTANT(LEADERBOARD_SORT_METHOD_ASCENDING);
+  BIND_CONSTANT(LEADERBOARD_SORT_METHOD_DESCENDING);
+  BIND_CONSTANT(LEADERBOARD_DISPLAY_TYPE_NONE);
+  BIND_CONSTANT(LEADERBOARD_DISPLAY_TYPE_NUMBER);
+  BIND_CONSTANT(LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS);
+  BIND_CONSTANT(LEADERBOARD_DISPLAY_TYPE_TIME_MILLISECONDS);
+
 }

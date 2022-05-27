@@ -17,6 +17,21 @@ public:
   static GodotGOGUserstats *get_singleton();
   static void reset_singleton();
 
+  enum SortMethod
+  {
+    LEADERBOARD_SORT_METHOD_NONE,
+    LEADERBOARD_SORT_METHOD_ASCENDING,
+    LEADERBOARD_SORT_METHOD_DESCENDING
+  };
+
+  enum DisplayType
+  {
+    LEADERBOARD_DISPLAY_TYPE_NONE,
+    LEADERBOARD_DISPLAY_TYPE_NUMBER,
+    LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS,
+    LEADERBOARD_DISPLAY_TYPE_TIME_MILLISECONDS
+  };
+
   GodotGOGUserstats();
   ~GodotGOGUserstats();
 
@@ -47,11 +62,13 @@ public:
   
   bool requestLeaderboards();
   bool findLeaderboard(const String &name);
+  bool findOrCreateLeaderboard(const String &name, const String &displayName, int sortMethod, int displayType);
+
   int getLeaderboardEntryCount(const String &name);
   bool downloadLeaderboardEntries(const String &name, int countBefore, int countAfter);
   bool setLeaderboardScore(const String &name, int score, bool forceUpdate = false);
 
-  Array getLeaderboardEntries(int fromIndex, int toIndex);
+  Array getLeaderboardEntries();
 
 protected:
   static void _bind_methods();

@@ -38,7 +38,7 @@ int GodotGOG::GOGInit(String clientId, String clientSecret, bool online) {
   } else {
     GOGStatus = GOG_INIT_IN_PROGRESS;
     // Trigger sign in right away
-    sign_in();
+    sign_in(online);
   }
 
   return GOGStatus;

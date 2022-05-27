@@ -55,6 +55,7 @@ Refer to the code and check out the [GOG documentation](https://docs.gog.com/gal
 
 - Your game must ship with the executable, GOG Galaxy API DLL/SO/DyLIB. Lack of the GOG Galaxy API DLL/SO/DyLib (for your respective OS) will cause it fail and crash.
   - **NOTE:** For OSX, the `libGalaxy64.dylib` must be in the `Content/MacOS/` folder in your application zip or the game will crash.
+  - **NOTE:** For OSX you need to run the following command `install_name_tool -add_rpath @executable_path/. <PATH TO THE APP>.app/Contents/MacOS/<EXECUTABLE NAME>`
 
 From here you should be able to call various functions of GOG Galaxy. You should be able to look up the functions in Godot itself under the search section. In addition, you should be able to read the GOG Galaxy API documentation to see what all is available and cross-reference with GodotGOG.
 

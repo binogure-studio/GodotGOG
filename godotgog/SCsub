@@ -18,8 +18,9 @@ if env["platform"]== "linuxbsd" or env["platform"] == "server":
     env.Append(RPATH=[env.Literal('\\$$ORIGIN/linux64')])
     env.Append(LIBPATH=["%s/sdk/Libraries/linux64" % module_path])
 
+# If compiling Windows
 elif env["platform"] == "windows":
-  # mostly VisualStudio
+  # Mostly VisualStudio
   if env["CC"] == "cl":
     if env["bits"]=="x86_32":
       env.Append(LINKFLAGS=["Galaxy.lib"])
@@ -27,7 +28,8 @@ elif env["platform"] == "windows":
     else: # 64 bit
       env.Append(LINKFLAGS=["Galaxy64.lib"])
       env.Append(LIBPATH=["%s/sdk/Libraries/win64" % module_path])
-  # mostly "gcc"
+
+  # Mostly "GCC"
   else:
     if env["bits"]=="x86_32":
       env.Append(LIBS=["Galaxy"])
@@ -35,7 +37,9 @@ elif env["platform"] == "windows":
     else: # 64 bit
       env.Append(LIBS=["Galaxy64"])
       env.Append(LIBPATH=["%s/sdk/Libraries/win64" % module_path])
-elif env["platform"] == "osx":
+
+# If compiling OSX
+elif env["platform"] == "macos":
   env.Append(LIBS=["Galaxy64"])
   env.Append(LIBPATH=['%s/sdk/Libraries/osx' % module_path])
 

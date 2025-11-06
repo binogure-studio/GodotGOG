@@ -6,9 +6,9 @@
 #include <galaxy/GalaxyID.h>
 #include <galaxy/GalaxyApi.h>
 
-#include "core/dictionary.h"
-#include "core/object.h"
-#include "core/reference.h"
+#include "core/object/object.h"
+#include "core/object/ref_counted.h"
+#include "core/variant/dictionary.h"
 
 #define GOG_FAIL_COND(m_cond) \
   {                             \
@@ -66,8 +66,7 @@ private:
   void OnAuthFailure(galaxy::api::IAuthListener::FailureReason failureReason) override;
   void OnAuthLost() override;
 
-  OBJ_TYPE(GodotGOG, Object);
-  OBJ_CATEGORY("GodotGOG");
+  GDCLASS(GodotGOG, Object);
 };
 
 #endif // GODOTGOG_H

@@ -1,7 +1,6 @@
 #ifndef GODOTGOGFRIENDS_H
 #define GODOTGOGFRIENDS_H
 
-#include "scene/resources/texture.h"
 #include "godotgog.h"
 
 class GodotGOGFriends : public Object,
@@ -24,7 +23,6 @@ public:
 
   bool isFriendsReady();
 
-  Image drawAvatar(int iSize, uint8_t *iBuffer);
   String get_friend_persona_name(uint64_t user_id);
   bool get_friend_avatar(uint64_t user_id);
   String get_persona_name();
@@ -36,8 +34,7 @@ protected:
 
 private:
 
-  OBJ_TYPE(GodotGOGFriends, Object);
-  OBJ_CATEGORY("GodotGOGFriends");
+  GDCLASS(GodotGOGFriends, Object);
 
   void OnUserInformationRetrieveSuccess(galaxy::api::GalaxyID userID) override;
   void OnUserInformationRetrieveFailure(galaxy::api::GalaxyID userID, FailureReason failureReason) override;

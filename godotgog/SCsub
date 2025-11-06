@@ -3,7 +3,40 @@
 Import('env')
 
 # Thirdparty source files
-if (env['build_gog'] != 'no'):
-  env.add_source_files(env.modules_sources, "*.cpp")
+module_path = Dir('.').srcnode().abspath
 
-  Export('env')
+env.Append(CPPPATH=["%s/sdk/Include/" % module_path])
+
+if env["platform"]== "linuxbsd" or env["platform"] == "server":
+  if env["arch"]=="x86_32":
+    env.Append(LIBS=["Galaxy"])
+    env.Append(RPATH=[env.Literal('\\$$ORIGIN/linux32')])
+    env.Append(LIBPATH=["%s/sdk/Libraries/linux32" % module_path])
+
+  else: # 64 bit
+    env.Append(LIBS=["Galaxy64"])
+    env.Append(RPATH=[env.Literal('\\$$ORIGIN/linux64')])
+    env.Append(LIBPATH=["%s/sdk/Libraries/linux64" % module_path])
+
+elif env["platform"] == "windows":
+  # mostly VisualStudio
+  if env["CC"] == "cl":
+    if env["bits"]=="x86_32":
+      env.Append(LINKFLAGS=["Galaxy.lib"])
+      env.Append(LIBPATH=["%s/sdk/Libraries/win32" % module_path])
+    else: # 64 bit
+      env.Append(LINKFLAGS=["Galaxy64.lib"])
+      env.Append(LIBPATH=["%s/sdk/Libraries/win64" % module_path])
+  # mostly "gcc"
+  else:
+    if env["bits"]=="x86_32":
+      env.Append(LIBS=["Galaxy"])
+      env.Append(LIBPATH=["%s/sdk/Libraries/win32" % module_path])
+    else: # 64 bit
+      env.Append(LIBS=["Galaxy64"])
+      env.Append(LIBPATH=["%s/sdk/Libraries/win64" % module_path])
+elif env["platform"] == "osx":
+  env.Append(LIBS=["Galaxy64"])
+  env.Append(LIBPATH=['%s/sdk/Libraries/osx' % module_path])
+
+env.add_source_files(env.modules_sources, "*.cpp")

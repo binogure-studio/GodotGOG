@@ -29,7 +29,7 @@ bool GodotGOGFriends::isFriendsReady() { return galaxy::api::Friends() != NULL; 
 bool GodotGOGFriends::get_friend_avatar(uint64_t userID) {
   GOG_FAIL_COND_V(!isFriendsReady(), false);
 
-  galaxy::api::Friends()->RequestUserInformation(galaxy::api::GalaxyID(userID), (galaxy::api::AvatarType) AVATAR_LARGE, this);
+  galaxy::api::Friends()->RequestUserInformation(galaxy::api::GalaxyID::FromRealID(galaxy::api::GalaxyID::ID_TYPE_USER, userID), (galaxy::api::AvatarType) AVATAR_LARGE, this);
   if (galaxy::api::GetError()) {
     printf("GOG Galaxy: Failed to request user informations: %s\n", galaxy::api::GetError()->GetMsg());
 
@@ -37,26 +37,6 @@ bool GodotGOGFriends::get_friend_avatar(uint64_t userID) {
   }
 
   return true;
-}
-
-Image GodotGOGFriends::drawAvatar(int iSize, uint8_t *iBuffer) {
-
-  // Apply buffer to Image
-  Image avatar(iSize, iSize, false, Image::FORMAT_RGBA);
-  for (int y = 0; y < iSize; y++) {
-    for (int x = 0; x < iSize; x++) {
-      int index = 4 * (x + y * iSize);
-
-      float r = float(iBuffer[index]) / 255;
-      float g = float(iBuffer[index + 1]) / 255;
-      float b = float(iBuffer[index + 2]) / 255;
-      float a = float(iBuffer[index + 3]) / 255;
-
-      avatar.put_pixel(x, y, Color(r, g, b, a));
-    }
-  }
-
-  return avatar;
 }
 
 String GodotGOGFriends::get_friend_persona_name(uint64_t userID) {
@@ -84,14 +64,13 @@ int GodotGOGFriends::get_persona_state() {
 
 // Listeners
 void GodotGOGFriends::OnUserInformationRetrieveSuccess(galaxy::api::GalaxyID userID) {
-  int size = 184;
-  int buffSize = 4 * size * size;
-  uint8_t *iBuffer = new uint8_t[buffSize];
+  int width = 184;
+  PackedByteArray data;
+  data.resize(width * width * 4);
 
-  galaxy::api::Friends()->GetFriendAvatarImageRGBA(userID, (galaxy::api::AvatarType) AVATAR_LARGE, iBuffer, buffSize);
-  Image avatar = drawAvatar(size, iBuffer);
+  galaxy::api::Friends()->GetFriendAvatarImageRGBA(userID, (galaxy::api::AvatarType) AVATAR_LARGE, data.ptrw(), data.size());
 
-  call_deferred("emit_signal", "avatar_loaded", AVATAR_LARGE, userID.GetRealID(), avatar);
+  call_deferred("emit_signal", "avatar_loaded", userID.GetRealID(), width, data);
 }
 
 void GodotGOGFriends::OnUserInformationRetrieveFailure(galaxy::api::GalaxyID userID, FailureReason failureReason) {
@@ -101,13 +80,21 @@ void GodotGOGFriends::OnUserInformationRetrieveFailure(galaxy::api::GalaxyID use
 
 void GodotGOGFriends::_bind_methods() {
   //Friends
-  ObjectTypeDB::bind_method(_MD("get_persona_name"), &GodotGOGFriends::get_persona_name);
-  ObjectTypeDB::bind_method(_MD("get_persona_state"), &GodotGOGFriends::get_persona_state);
-  ObjectTypeDB::bind_method(_MD("get_friend_persona_name", "user_id"), &GodotGOGFriends::get_friend_persona_name);
-  ObjectTypeDB::bind_method(_MD("get_friend_avatar", "user_id"), &GodotGOGFriends::get_friend_avatar);
+  ClassDB::bind_method(D_METHOD("get_persona_name"), &GodotGOGFriends::get_persona_name);
+  ClassDB::bind_method(D_METHOD("get_persona_state"), &GodotGOGFriends::get_persona_state);
+  ClassDB::bind_method(D_METHOD("get_friend_persona_name", "user_id"), &GodotGOGFriends::get_friend_persona_name);
+  ClassDB::bind_method(D_METHOD("get_friend_avatar", "user_id"), &GodotGOGFriends::get_friend_avatar);
 
-  ADD_SIGNAL(MethodInfo("avatar_loaded", PropertyInfo(Variant::INT, "userID"), PropertyInfo(Variant::INT, "type"), PropertyInfo(Variant::IMAGE, "avatar")));
-  ADD_SIGNAL(MethodInfo("avatar_failed", PropertyInfo(Variant::INT, "userID"), PropertyInfo(Variant::INT, "failureReason")));
+  ADD_SIGNAL(MethodInfo("avatar_loaded",
+    PropertyInfo(Variant::INT, "size"),
+    PropertyInfo(Variant::INT, "steamID"),
+    PropertyInfo(Variant::ARRAY, "avatar")
+  ));
+
+  ADD_SIGNAL(MethodInfo("avatar_failed",
+    PropertyInfo(Variant::INT, "userID"),
+    PropertyInfo(Variant::INT, "failureReason")
+  ));
 
   BIND_CONSTANT(AVATAR_NONE);
   BIND_CONSTANT(AVATAR_SMALL);

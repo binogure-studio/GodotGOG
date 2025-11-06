@@ -1,3 +1,11 @@
+# Don't commit VSCode folder
+.vscode/
 
-*.o
+# Don't commit the sdk
+godotgog/sdk/
+
+# do not commit generated files
+*.pyc
+*.a
 *.obj
+*.o

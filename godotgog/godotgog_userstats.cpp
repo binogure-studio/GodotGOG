@@ -301,7 +301,7 @@ void GodotGOGUserstats::OnLeaderboardEntriesRetrieveSuccess(const char* name, ui
   
   leaderboard_entries.clear();
 
-  for (int index = 0; index < entryCount; index++) {
+  for (uint32_t index = 0; index < entryCount; index++) {
     uint32_t rank;
     int32_t score;
     galaxy::api::GalaxyID user_id;
@@ -348,29 +348,29 @@ void GodotGOGUserstats::OnLeaderboardRetrieveFailure(const char* name, galaxy::a
 void GodotGOGUserstats::_bind_methods() {
 
   //Stats & Achievements
-  ObjectTypeDB::bind_method(_MD("queryAchievements"), &GodotGOGUserstats::queryAchievements);
-  ObjectTypeDB::bind_method(_MD("storeAchievements"), &GodotGOGUserstats::storeAchievements);
+  ClassDB::bind_method(D_METHOD("queryAchievements"), &GodotGOGUserstats::queryAchievements);
+  ClassDB::bind_method(D_METHOD("storeAchievements"), &GodotGOGUserstats::storeAchievements);
 
-  ObjectTypeDB::bind_method(_MD("clearAchievement", "name"), &GodotGOGUserstats::clearAchievement);
-  ObjectTypeDB::bind_method(_MD("getUserTimePlayed"), &GodotGOGUserstats::getUserTimePlayed);
-  ObjectTypeDB::bind_method(_MD("isAchievementVisible", "name"), &GodotGOGUserstats::isAchievementVisible);
-  ObjectTypeDB::bind_method(_MD("getAchievement", "name"), &GodotGOGUserstats::getAchievement);
-  ObjectTypeDB::bind_method(_MD("getAchievementAndUnlockTime", "name"), &GodotGOGUserstats::getAchievementAndUnlockTime);
-  ObjectTypeDB::bind_method(_MD("setAchievement", "name"), &GodotGOGUserstats::setAchievement);
-  ObjectTypeDB::bind_method(_MD("getAchievementName", "name"), &GodotGOGUserstats::getAchievementName);
-  ObjectTypeDB::bind_method(_MD("getAchievementDescription", "name"), &GodotGOGUserstats::getAchievementDescription);
-  ObjectTypeDB::bind_method(_MD("setStatFloat", "name", "value"), &GodotGOGUserstats::setStatFloat);
-  ObjectTypeDB::bind_method(_MD("getStatFloat", "name"), &GodotGOGUserstats::getStatFloat);
-  ObjectTypeDB::bind_method(_MD("setStatInt", "name", "value"), &GodotGOGUserstats::setStatInt);
-  ObjectTypeDB::bind_method(_MD("getStatInt", "name"), &GodotGOGUserstats::getStatInt);
-  ObjectTypeDB::bind_method(_MD("resetAllStats"), &GodotGOGUserstats::resetAllStats);
-  ObjectTypeDB::bind_method(_MD("requestLeaderboards"), &GodotGOGUserstats::requestLeaderboards);
-  ObjectTypeDB::bind_method(_MD("findLeaderboard", "name"), &GodotGOGUserstats::findLeaderboard);
-  ObjectTypeDB::bind_method(_MD("findOrCreateLeaderboard", "name", "displayName", "sortMethod", "displayType"), &GodotGOGUserstats::findOrCreateLeaderboard);
-  ObjectTypeDB::bind_method(_MD("getLeaderboardEntryCount", "name"), &GodotGOGUserstats::getLeaderboardEntryCount);
-  ObjectTypeDB::bind_method(_MD("downloadLeaderboardEntries", "rStart", "rEnd", "type"), &GodotGOGUserstats::downloadLeaderboardEntries);
-  ObjectTypeDB::bind_method(_MD("setLeaderboardScore", "name", "score", "forceUpdate"), &GodotGOGUserstats::setLeaderboardScore);
-  ObjectTypeDB::bind_method(_MD("getLeaderboardEntries"), &GodotGOGUserstats::getLeaderboardEntries);
+  ClassDB::bind_method(D_METHOD("clearAchievement", "name"), &GodotGOGUserstats::clearAchievement);
+  ClassDB::bind_method(D_METHOD("getUserTimePlayed"), &GodotGOGUserstats::getUserTimePlayed);
+  ClassDB::bind_method(D_METHOD("isAchievementVisible", "name"), &GodotGOGUserstats::isAchievementVisible);
+  ClassDB::bind_method(D_METHOD("getAchievement", "name"), &GodotGOGUserstats::getAchievement);
+  ClassDB::bind_method(D_METHOD("getAchievementAndUnlockTime", "name"), &GodotGOGUserstats::getAchievementAndUnlockTime);
+  ClassDB::bind_method(D_METHOD("setAchievement", "name"), &GodotGOGUserstats::setAchievement);
+  ClassDB::bind_method(D_METHOD("getAchievementName", "name"), &GodotGOGUserstats::getAchievementName);
+  ClassDB::bind_method(D_METHOD("getAchievementDescription", "name"), &GodotGOGUserstats::getAchievementDescription);
+  ClassDB::bind_method(D_METHOD("setStatFloat", "name", "value"), &GodotGOGUserstats::setStatFloat);
+  ClassDB::bind_method(D_METHOD("getStatFloat", "name"), &GodotGOGUserstats::getStatFloat);
+  ClassDB::bind_method(D_METHOD("setStatInt", "name", "value"), &GodotGOGUserstats::setStatInt);
+  ClassDB::bind_method(D_METHOD("getStatInt", "name"), &GodotGOGUserstats::getStatInt);
+  ClassDB::bind_method(D_METHOD("resetAllStats"), &GodotGOGUserstats::resetAllStats);
+  ClassDB::bind_method(D_METHOD("requestLeaderboards"), &GodotGOGUserstats::requestLeaderboards);
+  ClassDB::bind_method(D_METHOD("findLeaderboard", "name"), &GodotGOGUserstats::findLeaderboard);
+  ClassDB::bind_method(D_METHOD("findOrCreateLeaderboard", "name", "displayName", "sortMethod", "displayType"), &GodotGOGUserstats::findOrCreateLeaderboard);
+  ClassDB::bind_method(D_METHOD("getLeaderboardEntryCount", "name"), &GodotGOGUserstats::getLeaderboardEntryCount);
+  ClassDB::bind_method(D_METHOD("downloadLeaderboardEntries", "rStart", "rEnd", "type"), &GodotGOGUserstats::downloadLeaderboardEntries);
+  ClassDB::bind_method(D_METHOD("setLeaderboardScore", "name", "score", "forceUpdate"), &GodotGOGUserstats::setLeaderboardScore);
+  ClassDB::bind_method(D_METHOD("getLeaderboardEntries"), &GodotGOGUserstats::getLeaderboardEntries);
 
   //Signals
   ADD_SIGNAL(MethodInfo("stats_and_achievement_retrieve_success", PropertyInfo(Variant::INT, "userID")));

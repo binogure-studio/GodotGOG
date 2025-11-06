@@ -147,16 +147,16 @@ void GodotGOG::OnAuthLost() {
 
 void GodotGOG::_bind_methods() {
   //Initialization
-  ObjectTypeDB::bind_method(_MD("GOGInit", "clientId", "clientSecret", "online"), &GodotGOG::GOGInit);
-  ObjectTypeDB::bind_method(_MD("run_callbacks"), &GodotGOG::run_callbacks);
-  ObjectTypeDB::bind_method(_MD("shutdown"), &GodotGOG::shutdown);
+  ClassDB::bind_method(D_METHOD("GOGInit", "clientId", "clientSecret", "online"), &GodotGOG::GOGInit);
+  ClassDB::bind_method(D_METHOD("run_callbacks"), &GodotGOG::run_callbacks);
+  ClassDB::bind_method(D_METHOD("shutdown"), &GodotGOG::shutdown);
 
   //User
-  ObjectTypeDB::bind_method(_MD("get_galaxy_id"), &GodotGOG::get_galaxy_id);
-  ObjectTypeDB::bind_method(_MD("sign_in", "online"), &GodotGOG::sign_in);
-  ObjectTypeDB::bind_method(_MD("sign_out"), &GodotGOG::sign_out);
-  ObjectTypeDB::bind_method(_MD("signed_in"), &GodotGOG::signed_in);
-  ObjectTypeDB::bind_method(_MD("is_logged_out"), &GodotGOG::is_logged_out);
+  ClassDB::bind_method(D_METHOD("get_galaxy_id"), &GodotGOG::get_galaxy_id);
+  ClassDB::bind_method(D_METHOD("sign_in", "online"), &GodotGOG::sign_in);
+  ClassDB::bind_method(D_METHOD("sign_out"), &GodotGOG::sign_out);
+  ClassDB::bind_method(D_METHOD("signed_in"), &GodotGOG::signed_in);
+  ClassDB::bind_method(D_METHOD("is_logged_out"), &GodotGOG::is_logged_out);
 
   //Signals
   ADD_SIGNAL(MethodInfo("auth_success"));

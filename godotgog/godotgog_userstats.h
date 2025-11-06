@@ -99,7 +99,6 @@ private:
   void OnLeaderboardRetrieveSuccess(const char* name) override;
   void OnLeaderboardRetrieveFailure(const char* name, galaxy::api::ILeaderboardRetrieveListener::FailureReason failureReason) override;
 
-  OBJ_TYPE(GodotGOGUserstats, Object);
-  OBJ_CATEGORY("GodotGOGUserstats");
+  GDCLASS(GodotGOGUserstats, Object);
 };
 #endif // GODOTGOGUSERSTATS_H

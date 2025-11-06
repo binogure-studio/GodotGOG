@@ -10,7 +10,7 @@ Refer to the code and check out the [GOG documentation](https://docs.gog.com/gal
 
 * Download this repository and unpack it.
 * Download and unpack the GOG Galaxy SDK; this requires a GOG developer account.
-* Download and unpack the Godot source; branch **2.1**
+* Download and unpack the Godot source; branch **4.5**
 * Move the following to `godotgog/sdk/`:
 ```
   sdk/Include
@@ -23,9 +23,9 @@ Refer to the code and check out the [GOG documentation](https://docs.gog.com/gal
 
 - Now move the **godotgog** directory into the **modules** directory of the unpacked Godot Engine source.
 - Recompile for your platform:
-  - Windows ( https://docs.godotengine.org/en/2.1/development/compiling/compiling_for_windows.html )
-  - Linux ( https://docs.godotengine.org/en/2.1/development/compiling/compiling_for_x11.html )
-  - OSX ( https://docs.godotengine.org/en/2.1/development/compiling/compiling_for_osx.html )
+  - Windows ( https://docs.godotengine.org/en/4.5/engine_details/development/compiling/compiling_for_windows.html )
+  - Linux ( https://docs.godotengine.org/en/4.5/engine_details/development/compiling/compiling_for_linuxbsd.html )
+  - OSX ( https://docs.godotengine.org/en/4.5/engine_details/development/compiling/compiling_for_macos.html )
 - When recompiling the engine is finished, copy the shared library (Galaxy) from sdk/Libraries/ folders to the Godot binary location (by default in the godot source /bin/ file but you can move them to a new folder). It should look like this:
   - Linux 32/64-bit
   ```
